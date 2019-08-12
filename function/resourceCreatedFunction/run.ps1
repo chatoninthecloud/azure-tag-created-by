@@ -50,8 +50,6 @@ function Get-ResourceCreatorDisplayName {
     $displayName
 }
 
-$QueueItem | ConvertTo-Json -depth 100 | Out-File "D:\message.json"
-
 # Write out the queue message and insertion time to the information log.
 Write-Host "Processing message"
 $resourceUri = $QueueItem.data.resourceUri
