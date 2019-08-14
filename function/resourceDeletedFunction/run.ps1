@@ -12,5 +12,5 @@ $row = Get-AzTableRow -Table $cloudTable -PartitionKey $formatedResourceUri -Row
 
 if ($row) {
     Write-Host "Removing resource $resourceUri from referential"
-    $row | Remove-AzTableRow -Table $cloudTable
+    $row | Remove-AzTableRow -Table $cloudTable    
 }
