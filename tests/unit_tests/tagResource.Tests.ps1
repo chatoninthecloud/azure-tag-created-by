@@ -1,6 +1,14 @@
 Describe "Tag resource module tests" -Tag @("tagResourceModule","unit_test") {
-    Import-Module .\function\Modules\tagResource -Force    
-    Set-Location .\function
+
+    BeforeAll {
+        Import-Module .\function\Modules\tagResource -Force   
+        Set-Location .\function 
+    }
+    
+    AfterAll {
+        Set-Location ..
+    }
+    
 
     Context "Checking the referential of resouces supporting tag" {
 
@@ -173,6 +181,4 @@ Describe "Tag resource module tests" -Tag @("tagResourceModule","unit_test") {
             Assert-MockCalled Get-AzTableRow -Times 1            
         }
     }
-
-    Set-Location ..
 }

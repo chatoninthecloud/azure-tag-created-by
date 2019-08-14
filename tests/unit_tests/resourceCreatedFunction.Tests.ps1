@@ -1,8 +1,14 @@
 Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunction","unit_test") {
     # Remove Write-Host message from test running
 
-    Import-Module .\function\Modules\tagResource -Force
-    Set-Location .\function
+    BeforeAll {
+        Import-Module .\function\Modules\tagResource -Force   
+        Set-Location .\function 
+    }
+    
+    AfterAll {
+        Set-Location ..
+    }
     
     # The queueitem input message
     $testQueueItem = @{
@@ -92,7 +98,5 @@ Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunc
 
             Assert-VerifiableMock
         }
-    }
-
-    Set-Location ..
+    }    
 }
