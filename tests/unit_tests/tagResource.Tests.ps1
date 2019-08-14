@@ -1,36 +1,38 @@
 Describe "Tag resource module tests" -Tag @("tagResourceModule","unit_test") {
-    Import-Module .\function\Modules\tagResource -Force    
-    Set-Location .\function
+
+    BeforeAll {
+        Import-Module .\function\Modules\tagResource -Force        
+    }
 
     Context "Checking the referential of resouces supporting tag" {
 
         it "Resources type not in referential should not support tags" {
-            $supportTag = Test-ResourceTypeSupportTags -resourceType "ninja/youcantfindme" -referentialFilePath ".\resourceCreatedFunction\tag-support.csv"
+            $supportTag = Test-ResourceTypeSupportTags -resourceType "ninja/youcantfindme" -referentialFilePath ".\function\resourceCreatedFunction\tag-support.csv"
             $supportTag | Should -Be $false
         }
 
         it "Resources type with matching provider but no serviceName should not support tags" {
-            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/youcantfindme" -referentialFilePath ".\resourceCreatedFunction\tag-support.csv"
+            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/youcantfindme" -referentialFilePath ".\function\resourceCreatedFunction\tag-support.csv"
             $supportTag | Should -Be $false
         }
 
         it "Resources type with matching provider and serviceName and TRUE supportsTags column should support tags" {
-            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/storageAccounts" -referentialFilePath ".\resourceCreatedFunction\tag-support.csv"
+            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/storageAccounts" -referentialFilePath ".\function\resourceCreatedFunction\tag-support.csv"
             $supportTag | Should -Be $true
         }
 
         it "Resources type with matching provider and serviceName and FALSE supportsTags column should not support tags" {
-            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/usages" -referentialFilePath ".\resourceCreatedFunction\tag-support.csv"
+            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/usages" -referentialFilePath ".\function\resourceCreatedFunction\tag-support.csv"
             $supportTag | Should -Be $false
         }
 
         it "Resources type with matching provider and multi part serviceName and TRUE supportsTags column should support tags" {
-            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Web/sites/slots" -referentialFilePath ".\resourceCreatedFunction\tag-support.csv"
+            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Web/sites/slots" -referentialFilePath ".\function\resourceCreatedFunction\tag-support.csv"
             $supportTag | Should -Be $true
         }
 
         it "Resources type with matching provider and multi part serviceName and FALSE supportsTags column should not support tags" {
-            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/storageAccounts/blobServices" -referentialFilePath ".\resourceCreatedFunction\tag-support.csv"
+            $supportTag = Test-ResourceTypeSupportTags -resourceType "Microsoft.Storage/storageAccounts/blobServices" -referentialFilePath ".\function\resourceCreatedFunction\tag-support.csv"
             $supportTag | Should -Be $false
         }
     }
@@ -173,6 +175,4 @@ Describe "Tag resource module tests" -Tag @("tagResourceModule","unit_test") {
             Assert-MockCalled Get-AzTableRow -Times 1            
         }
     }
-
-    Set-Location ..
 }

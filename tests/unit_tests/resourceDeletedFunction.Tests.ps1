@@ -1,18 +1,19 @@
 Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunction","unit_test") {
     # Remove Write-Host message from test running
 
-    Import-Module .\function\Modules\tagResource -Force
-    Set-Location .\function
-    
-    # The queueitem input message
-    $testQueueItem = @{
-        data = @{
-            resourceUri = "myresourceurI/HellO/pubLIcIp";
-            subscriptionId = "172545785462556";
-        }
-    }
+    BeforeAll {
+        Import-Module .\function\Modules\tagResource -Force   
 
-    $formatedResourceUri = "myresourceuri-Hello-publicip" 
+        # The queueitem input message
+        $testQueueItem = @{
+            data = @{
+                resourceUri = "myresourceurI/HellO/pubLIcIp";
+                subscriptionId = "172545785462556";
+            }
+        }
+
+        $formatedResourceUri = "myresourceuri-Hello-publicip" 
+    }    
 
     Context "Update the referential" {
 
@@ -41,7 +42,7 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
 
             }
 
-            .\resourceDeletedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceDeletedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-VerifiableMock
         }
@@ -53,7 +54,6 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
             $env:tableName = "theTableName"  
             
             $cloudTable = @{hello="iamacloudtable"}  
-            $row = @{hello="iamthetablerow"}
 
             Mock Get-AzTableTable -Verifiable {return $cloudTable} -ParameterFilter {
                 $storageAccountName -eq $env:storageName `
@@ -68,12 +68,11 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
 
             Mock Remove-AzTableRow -Verifiable 
 
-            .\resourceDeletedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceDeletedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-MockCalled Get-AzTableTable -Times 1    
             Assert-MockCalled Get-AzTableRow -Times 1                
             Assert-MockCalled Remove-AzTableRow -Times 0 
         }
     }
-    Set-Location ..
 }

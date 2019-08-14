@@ -1,15 +1,15 @@
 Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunction","unit_test") {
     # Remove Write-Host message from test running
 
-    Import-Module .\function\Modules\tagResource -Force
-    Set-Location .\function
-    
-    # The queueitem input message
-    $testQueueItem = @{
-        eventTime = "now";
-        data = @{
-            resourceUri = "myresourceuri/toto/publicip";
-            subscriptionId = "172545785462556";
+    BeforeAll {
+        Import-Module .\function\Modules\tagResource -Force   
+        # The queueitem input message
+        $testQueueItem = @{
+            eventTime = "now";
+            data = @{
+                resourceUri = "myresourceuri/toto/publicip";
+                subscriptionId = "172545785462556";
+            }
         }
     }
 
@@ -19,7 +19,7 @@ Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunc
 
             Mock Get-AzResource -Verifiable {return $null} -ParameterFilter {$resourceUri -eq $testQueueItem.data.resourceUri}
 
-            .\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-VerifiableMock
         }
@@ -31,7 +31,7 @@ Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunc
             }
             Mock Get-AzResource -Verifiable {return $resource} -ParameterFilter {$resourceUri -eq $testQueueItem.data.resourceUri}
 
-            .\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-VerifiableMock
         }
@@ -44,7 +44,7 @@ Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunc
             Mock Get-AzResource -Verifiable {return $resource} -ParameterFilter {$resourceUri -eq $testQueueItem.data.resourceUri}
             Mock Test-ResourceTypeSupportTags -Verifiable {return $false} -ParameterFilter {$resourceType -eq $resource.resourceType}
 
-            .\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-VerifiableMock
         }
@@ -67,7 +67,7 @@ Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunc
             }
             Mock Update-referential -Verifiable {return "didier"} -ParameterFilter $updateReferentialParameterFilter
             Mock Set-ResourceCreatedByTag -Verifiable -ParameterFilter {$resourceTags -eq $null -and $creatorDisplayName -eq "didier"}
-            .\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-VerifiableMock
         }
@@ -88,11 +88,9 @@ Describe "A resource is created in the subscription" -Tag @("resourceCreatedFunc
             }
             Mock Update-referential -Verifiable {return "françis"} -ParameterFilter $updateReferentialParameterFilter
             Mock Set-ResourceCreatedByTag -Verifiable -ParameterFilter {$resourceTags -eq $null -and $creatorDisplayName -eq "françis"}
-            .\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
+            .\function\resourceCreatedFunction\run.ps1 -QueueItem $testQueueItem
 
             Assert-VerifiableMock
         }
-    }
-
-    Set-Location ..
+    }    
 }

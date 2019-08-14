@@ -1,26 +1,27 @@
 Describe "Deployment of createdBy Tag tool" -Tag @("deploymentTests","integration_tests") {
     Context "The deployment has been done" {
 
-        # Read configuration files to get values
-        $defaultConfig = Get-Content -Raw -Path ".\terraform\var.tf.json" | ConvertFrom-Json
-        $environmentConfigObject = Get-Content -Raw -Path ".\terraform\environment\dev.tfvars.json" | ConvertFrom-Json
+        BeforeAll {
+            # Read configuration files to get values
+            $defaultConfig = Get-Content -Raw -Path ".\terraform\var.tf.json" | ConvertFrom-Json
+            $environmentConfigObject = Get-Content -Raw -Path ".\terraform\environment\dev.tfvars.json" | ConvertFrom-Json
 
-        $environmentConfigHash = @{}
-        foreach($currentSetting in $environmentConfigObject.PSObject.Properties) {
-            $environmentConfigHash[$currentSetting.Name] = $currentSetting.Value
-        }
-
-        $deployedConfig = @{}
-        foreach ($currentSetting in $defaultConfig.variable.PSObject.Properties) {
-            $currentSettingName = $currentSetting.Name            
-            if($environmentConfigHash.ContainsKey($currentSettingName)) {
-                $deployedConfig[$currentSettingName] = $environmentConfigHash[$currentSettingName]
+            $environmentConfigHash = @{}
+            foreach($currentSetting in $environmentConfigObject.PSObject.Properties) {
+                $environmentConfigHash[$currentSetting.Name] = $currentSetting.Value
             }
-            else {
-                $deployedConfig[$currentSettingName] = $currentSetting.Value.default
+
+            $deployedConfig = @{}
+            foreach ($currentSetting in $defaultConfig.variable.PSObject.Properties) {
+                $currentSettingName = $currentSetting.Name            
+                if($environmentConfigHash.ContainsKey($currentSettingName)) {
+                    $deployedConfig[$currentSettingName] = $environmentConfigHash[$currentSettingName]
+                }
+                else {
+                    $deployedConfig[$currentSettingName] = $currentSetting.Value.default
+                }            
             }            
         }
-        
 
         It "The Resource Group should be created" {
             $resouceGroup = Get-AzResourceGroup -Name $deployedConfig["resourceGroupName"] -Location $deployedConfig["region"] -ErrorAction SilentlyContinue
