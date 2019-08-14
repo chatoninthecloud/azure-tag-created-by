@@ -1,8 +1,14 @@
 Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunction","unit_test") {
     # Remove Write-Host message from test running
 
-    Import-Module .\function\Modules\tagResource -Force
-    Set-Location .\function
+    BeforeAll {
+        Import-Module .\function\Modules\tagResource -Force   
+        Set-Location .\function 
+    }
+    
+    AfterAll {
+        Set-Location ..
+    }
     
     # The queueitem input message
     $testQueueItem = @{
@@ -75,5 +81,4 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
             Assert-MockCalled Remove-AzTableRow -Times 0 
         }
     }
-    Set-Location ..
 }
