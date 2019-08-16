@@ -3,7 +3,6 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
 
     BeforeAll {
         Import-Module .\function\Modules\tagResource -Force   
-
         # The queueitem input message
         $testQueueItem = @{
             data = @{
@@ -11,7 +10,6 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
                 subscriptionId = "172545785462556";
             }
         }
-
         $formatedResourceUri = "myresourceuri-Hello-publicip" 
     }    
 
