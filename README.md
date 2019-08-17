@@ -1,3 +1,5 @@
+[![Build Status](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_apis/build/status/tag-azure-resources-CI-master?branchName=master)](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_build/latest?definitionId=3&branchName=master)
+
 # azure-tag-created-by
 Add a tag on Azure resources with its creator
 
