@@ -4,6 +4,15 @@
       "version": "1.28.0"
     }
   },
+  "terraform": {
+    "backend": {
+      "azurerm": {
+        "storage_account_name": "chatonstorage",
+        "container_name": "tagazure",
+        "key": "dev.terraform.tfstate"
+      }
+    }
+  },
   "data": {
     "azurerm_subscription": {
       "current": {}
