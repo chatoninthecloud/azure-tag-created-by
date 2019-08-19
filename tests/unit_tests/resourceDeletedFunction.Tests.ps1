@@ -1,4 +1,4 @@
-Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunction","unit_test") {
+Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunction", "unit_test") {
     # Remove Write-Host message from test running
 
     BeforeAll {
@@ -6,14 +6,14 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
         # The queueitem input message
         $testQueueItem = @{
             data = @{
-                resourceUri = "myresourceurI/HellO/pubLIcIp";
+                resourceUri    = "myresourceurI/HellO/pubLIcIp";
                 subscriptionId = "172545785462556";
             }
         }
         $formatedResourceUri = "myresourceuri-Hello-publicip" 
     }    
 
-    Context "Update the referential" {
+    Context "Entry in referential" {
 
         It "Should remove entry in referential if it exists" {   
             
@@ -21,21 +21,21 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
             $env:resourceGroupName = "theResourceGroup" 
             $env:tableName = "theTableName"  
             
-            $cloudTable = @{hello="iamacloudtable"}  
-            $row = @{hello="iamthetablerow"}
+            $cloudTable = @{hello = "iamacloudtable" }  
+            $row = @{hello = "iamthetablerow" }
 
-            Mock Get-AzTableTable -Verifiable {return $cloudTable} -ParameterFilter {
+            Mock Get-AzTableTable -Verifiable { return $cloudTable } -ParameterFilter {
                 $storageAccountName -eq $env:storageName `
-                -and $resourceGroup -eq $env:resourceGroupName `
-                -and $TableName -eq $env:tableName 
+                    -and $resourceGroup -eq $env:resourceGroupName `
+                    -and $TableName -eq $env:tableName 
             }       
-            Mock Get-AzTableRow -Verifiable {return $row} -ParameterFilter {
+            Mock Get-AzTableRow -Verifiable { return $row } -ParameterFilter {
                 $Table -eq $cloudTable `
-                -and $PartitionKey -eq  $formatedResourceUri `
-                -and $RowKey -eq $testQueueItem.data.subscriptionId
+                    -and $PartitionKey -eq $formatedResourceUri `
+                    -and $RowKey -eq $testQueueItem.data.subscriptionId
             }
 
-            Mock Remove-AzTableRow -Verifiable {return $null} -ParameterFilter {
+            Mock Remove-AzTableRow -Verifiable { return $null } -ParameterFilter {
                 $cloudTable -eq $cloudTable `
 
             }
@@ -44,24 +44,26 @@ Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunc
 
             Assert-VerifiableMock
         }
+    }
 
+    Context "No entry in referential" {
         It "Should do nothing if entry is not in referential" {   
             
             $env:storageName = "theStorage"
             $env:resourceGroupName = "theResourceGroup" 
             $env:tableName = "theTableName"  
             
-            $cloudTable = @{hello="iamacloudtable"}  
+            $cloudTable = @{hello = "iamacloudtable" }  
 
-            Mock Get-AzTableTable -Verifiable {return $cloudTable} -ParameterFilter {
+            Mock Get-AzTableTable -Verifiable { return $cloudTable } -ParameterFilter {
                 $storageAccountName -eq $env:storageName `
-                -and $resourceGroup -eq $env:resourceGroupName `
-                -and $TableName -eq $env:tableName 
+                    -and $resourceGroup -eq $env:resourceGroupName `
+                    -and $TableName -eq $env:tableName 
             }       
-            Mock Get-AzTableRow -Verifiable {return $null} -ParameterFilter {
+            Mock Get-AzTableRow -Verifiable { return $null } -ParameterFilter {
                 $Table -eq $cloudTable `
-                -and $PartitionKey -eq  $formatedResourceUri `
-                -and $RowKey -eq $testQueueItem.data.subscriptionId
+                    -and $PartitionKey -eq $formatedResourceUri `
+                    -and $RowKey -eq $testQueueItem.data.subscriptionId
             }
 
             Mock Remove-AzTableRow -Verifiable 
