@@ -1,6 +1,6 @@
-[![Build Status](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_apis/build/status/tag-azure-resources-CI-master?branchName=master)](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_build/latest?definitionId=3&branchName=master)
+[![Build Status](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_apis/build/status/tag-azure-resources-CI-master?branchName=master)](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_build/latest?definitionId=4&branchName=master)
 
-[![Build Status](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_apis/build/status/tag-azure-resources-Nightly?branchName=master&jobName=Nigthly%20Build)](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_build/latest?definitionId=4&branchName=master)
+![Azure DevOps tests](https://img.shields.io/azure-devops/tests/chatoninthecloud/tag-azure-resources/master/4?compact_message)
 
 # azure-tag-created-by
 Add a tag on Azure resources with its creator
