@@ -1,5 +1,5 @@
-[![Build Status](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_apis/build/status/tag-azure-resources-CI-master?branchName=master)](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_build/latest?definitionId=4&branchName=master)
-![Azure DevOps tests](https://img.shields.io/azure-devops/tests/chatoninthecloud/tag-azure-resources/4)
+![Azure DevOps builds](https://img.shields.io/azure-devops/build/chatoninthecloud/tag-azure-resources/4?style=plastic)
+![Azure DevOps tests](https://img.shields.io/azure-devops/tests/chatoninthecloud/tag-azure-resources/4?style=plastic)
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/chatoninthecloud/tag-azure-resources/4?style=plastic)
 
 # azure-tag-created-by
@@ -57,6 +57,10 @@ The service principal used by terraform must be Owner of the Subscription, since
   * The Application Insight
 * The role assignment, as a Contributor, of the function app identity (Owner required)
 
+## Terraform backend
+
+A Storage Account is used as backend for tfstate file
+
 # Deployment
 
 Clone this repository (might really be helpfull)
@@ -90,6 +94,21 @@ SET ARM_CLIENT_ID=The service principal application Id
 SET ARM_CLIENT_SECRET=A service principal secret key
 SET ARM_SUBSCRIPTION_ID=The subscription Id
 SET ARM_TENANT_ID=The tenant Id
+SET ARM_ACCESS_KEY=A backend storage account access key
+```
+
+Update the _main.tf_ file inside the _terraform_ folder
+
+```json
+ "terraform": {
+    "backend": {
+      "azurerm": {
+        "storage_account_name": "name of the backend storage account",
+        "container_name": "name of the container",
+        "key": "name of the tfstate file (dev.terraform.tfstate for example)"
+      }
+    }
+  }
 ```
 
 Run the following commands inside the terraform folder
