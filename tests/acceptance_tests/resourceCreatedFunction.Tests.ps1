@@ -9,7 +9,7 @@ Describe "Created resources supporting Tag are tagged with their creator" -Tag @
         $maxRetry = $configuration.maxRetry
         $delay = $configuration.delay
         Write-Host "Creating test Resource Group $resourceGroupName"
-        New-AzResourceGroup -Name $resourceGroupName -Location $location | Out-Null        
+        New-AzResourceGroup -Name $resourceGroupName -Location $location -Force | Out-Null        
     }
      
     AfterAll { 
