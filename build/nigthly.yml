@@ -5,10 +5,8 @@ schedules:
     include: 
     - master
   always: true
-trigger:
-  branches:
-    include:
-    - master
+trigger: none
+pr: none
 variables:
 - group: tagAzureResourceBuild
 pool:

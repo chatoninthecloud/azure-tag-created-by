@@ -2,6 +2,10 @@ trigger:
   branches:
     include:
     - '*'
+pr:
+  branches:
+    include:
+    - master
 pool:
   name: chaton linux
 steps:
