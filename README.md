@@ -1,8 +1,8 @@
 [![Build Status](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_apis/build/status/Nigthly%20build?branchName=master)](https://dev.azure.com/chatoninthecloud/tag-azure-resources/_build/latest?definitionId=8&branchName=master)
 
-![Azure DevOps tests](https://img.shields.io/azure-devops/tests/chatoninthecloud/tag-azure-resources/4?style=plastic)
+![Azure DevOps tests](https://img.shields.io/azure-devops/tests/chatoninthecloud/tag-azure-resources/8?style=plastic)
 
-![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/chatoninthecloud/tag-azure-resources/4?style=plastic)
+![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/chatoninthecloud/tag-azure-resources/8?style=plastic)
 
 # azure-tag-created-by
 Add a tag on Azure resources with its creator
