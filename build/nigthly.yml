@@ -1,0 +1,98 @@
+schedules:
+- cron: "0 0 * * *" 
+  displayName: "Nightly Build"
+  branches:
+    include: 
+    - master
+  always: true
+variables:
+- group: tagAzureResourceBuild
+pool:
+  name: chaton linux
+steps:
+- task: PowerShell@2
+  displayName: 'Run unit tests'
+  inputs:
+    targetType: filePath
+    filePath: ./tests/runtests.ps1
+    arguments: '-unitTests'
+
+- task: PublishTestResults@2
+  displayName: 'Publish unit tests result'
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '**/UnitTestResults.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Unit tests'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    summaryFileLocation: '**/unitTestCoverage.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)'
+
+- task: Bash@3
+  displayName: 'Deploy Infrastructure'
+  inputs:
+    targetType: filePath
+    filePath: './deployment/apply_infra.sh'
+  env:
+    MAPPED_TERRAFORM_SP_SECRET: $(terraform.sp.secret)
+    MAPPED_TERRAFORM_ACCESS_KEY: $(terraform.storage.acceskey)
+
+- task: PowerShell@2
+  displayName: 'Run deployment tests'
+  inputs:
+    targetType: filePath
+    filePath: ./tests/runtests.ps1
+    arguments: '-deploymentTests'
+  env:
+    MAPPED_TERRAFORM_SP_SECRET: $(terraform.sp.secret)
+
+- task: PublishTestResults@2
+  displayName: 'Publish deployment tests result'
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '**/IntegrationTestResults.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Integration tests'
+
+- task: PowerShell@2
+  displayName: 'Deploy Azure functions'
+  inputs:
+    targetType: filePath
+    filePath: './deployment/deploy_functions.ps1'
+  env:
+    MAPPED_TERRAFORM_SP_SECRET: $(terraform.sp.secret)
+
+- task: PowerShell@2
+  displayName: 'Run acceptance tests'
+  inputs:
+    targetType: filePath
+    filePath: ./tests/runtests.ps1
+    arguments: '-acceptanceTests'
+  env:
+    MAPPED_TERRAFORM_SP_SECRET: $(terraform.sp.secret)
+
+- task: PublishTestResults@2
+  displayName: 'Publish acceptance tests result'
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '**/AcceptanceTestResults.xml'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Integration tests'
+
+- bash: |
+   export ARM_SUBSCRIPTION_ID=$TERRAFORM_SP_SUBSCRIPTIONID
+   export ARM_TENANT_ID=$TERRAFORM_SP_TENANTID
+   export ARM_CLIENT_ID=$TERRAFORM_SP_APPLICATIONID
+   export ARM_CLIENT_SECRET=$MAPPED_TERRAFORM_SP_SECRET
+   export ARM_ACCESS_KEY=$MAPPED_TERRAFORM_ACCESS_KEY
+   cd ./terraform
+   terraform init
+   terraform destroy -var-file=./environment/dev.tfvars.json -auto-approve
+  displayName: 'Remove Infrastructure'
+  condition: always()
+  env:
+    MAPPED_TERRAFORM_SP_SECRET: $(terraform.sp.secret)
+    MAPPED_TERRAFORM_ACCESS_KEY: $(terraform.storage.acceskey)
