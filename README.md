@@ -4,6 +4,8 @@
 
 ![Azure DevOps coverage](https://img.shields.io/azure-devops/coverage/chatoninthecloud/tag-azure-resources/8?style=plastic)
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/02a9453f8a1b41668dfe1822c0a27402)](https://www.codacy.com/app/chatoninthecloud/azure-tag-created-by?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=chatoninthecloud/azure-tag-created-by&amp;utm_campaign=Badge_Grade)
+
 # azure-tag-created-by
 Add a tag on Azure resources with its creator
 
