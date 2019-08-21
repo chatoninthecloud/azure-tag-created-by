@@ -1,0 +1,26 @@
+trigger:
+  branches:
+    include:
+    - '*'
+pool:
+  name: chaton linux
+steps:
+- task: PowerShell@2
+  displayName: 'Run unit tests'
+  inputs:
+    targetType: filePath
+    filePath: ./tests/runtests.ps1
+    arguments: '-unitTests'
+
+- task: PublishTestResults@2
+  displayName: 'Publish Unit Test Results'
+  inputs:
+    testResultsFormat: NUnit
+    testResultsFiles: '**/UnitTestResults.xml'
+    failTaskOnFailedTests: true
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish Unit Test code coverage'
+  inputs:
+    summaryFileLocation: '**/unitTestCoverage.xml'
+    pathToSources: '$(System.DefaultWorkingDirectory)'
