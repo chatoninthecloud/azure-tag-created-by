@@ -2,7 +2,7 @@
 param($QueueItem, $TriggerMetadata)
 
 # Write out the queue message and insertion time to the information log.
-Write-Host "Processing message"
+Write-Information "Processing message"
 $resourceUri = $QueueItem.data.resourceUri
 $subscriptionId = $QueueItem.data.subscriptionId
 
@@ -11,6 +11,6 @@ $formatedResourceUri = ($resourceUri -replace "/","-").ToLower()
 $row = Get-AzTableRow -Table $cloudTable -PartitionKey $formatedResourceUri -RowKey $subscriptionId
 
 if ($row) {
-    Write-Host "Removing resource $resourceUri from referential"
+    Write-Information "Removing resource $resourceUri from referential"
     $row | Remove-AzTableRow -Table $cloudTable    
 }

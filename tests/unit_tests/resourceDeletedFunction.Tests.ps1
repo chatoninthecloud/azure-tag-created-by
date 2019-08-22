@@ -1,5 +1,4 @@
 Describe "A resource is deleted in the subscription" -Tag @("resourceDeletedFunction", "unit_test") {
-    # Remove Write-Host message from test running
 
     BeforeAll {
         Import-Module .\function\Modules\tagResource -Force   
