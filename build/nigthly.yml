@@ -21,7 +21,9 @@ steps:
 - task: Bash@3
   inputs:
     targetType: 'inline'
-    script: 'sudo npm i -g azure-functions-core-tools --unsafe-perm true' 
+    script: | 
+      sudo yum -y install npm
+      sudo npm i -g azure-functions-core-tools --unsafe-perm true
     
 - task: PowerShell@2
   displayName: 'Run unit tests'

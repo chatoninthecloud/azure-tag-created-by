@@ -8,12 +8,12 @@ Describe "Created resources supporting Tag are tagged with their creator" -Tag @
         $servicePrincipalId = $configuration.servicePrincipalId
         $maxRetry = $configuration.maxRetry
         $delay = $configuration.delay
-        Write-Host "Creating test Resource Group $resourceGroupName"
+        Write-Information "Creating test Resource Group $resourceGroupName"
         New-AzResourceGroup -Name $resourceGroupName -Location $location -Force | Out-Null        
     }
      
     AfterAll { 
-        Write-Host "Removing test Resource Group $resourceGroupName"
+        Write-Information "Removing test Resource Group $resourceGroupName"
         Remove-AzResourceGroup -Name "tag-test-rg" -Force | Out-Null
     }
 
@@ -35,12 +35,12 @@ Describe "Created resources supporting Tag are tagged with their creator" -Tag @
         while ($currentTry -le $maxRetry -and -not $tagAdded) {
             $resource = Get-AzResource -Name $resourceName -ResourceGroupName $resourceGroupName
             if($resource.Tags -and $resource.Tags.ContainsKey("createdBy")) {
-                Write-Host "Tag created"
+                Write-Information "Tag created"
                 $tagAdded = $true
                 $tagValue = $resource.Tags["createdBy"]
             } 
             else {
-                Write-Host "Tag createdBy not present after $($currentTry * $delay) seconds"
+                Write-Information "Tag createdBy not present after $($currentTry * $delay) seconds"
                 $currentTry++
                 Start-Sleep -Seconds $delay
             }                      
