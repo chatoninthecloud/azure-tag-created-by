@@ -14,16 +14,16 @@ function Test-ResourceTypeSupportTags {
     $currentResourceSupport = $tagSupportedResources | Where-Object {($_.providerName -eq $provider) -and ($_.resourceType -eq $serviceName)} | Select-Object -first 1
 
     if (-not ($currentResourceSupport)) {
-        Write-Host "$resourceType not found in tag support referential"
+        Write-Information "$resourceType not found in tag support referential"
         return $false
     }
 
     if ($currentResourceSupport.supportsTags -eq "FALSE") {
-        Write-Host "$resourceType does not support tags"
+        Write-Information "$resourceType does not support tags"
         return $false
     }
 
-    Write-Host "$resourceType does support tags"
+    Write-Information "$resourceType does support tags"
     $true
 }
 
@@ -35,17 +35,17 @@ function Get-EventInitiatorDisplayName {
 
     if ($queueItem.data.authorization.evidence.principalType -eq "ServicePrincipal") {
         #Created by a service principal
-        Write-Host "Created by a service principal"
+        Write-Information "Created by a service principal"
         $applicationId = $queueItem.data.claims.appid        
         $displayName = "Service Principal $applicationId"
     }
     else {
         #Created by a user
-        Write-Host "Created by a user"
+        Write-Information "Created by a user"
         $displayName = $QueueItem.data.claims.name
     }
 
-    Write-Host "Resource was created by $displayName"
+    Write-Information "Resource was created by $displayName"
     $displayName
 }
 
@@ -64,11 +64,11 @@ function Update-referential{
     $formatedResourceUri = ($resourceUri -replace "/","-").ToLower()
     $row = Get-AzTableRow -Table $cloudTable -PartitionKey $formatedResourceUri -RowKey $subscriptionId
     if (-not $row) {
-        Write-Host "No creator found in referential - Add it"   
+        Write-Information "No creator found in referential - Add it"   
         Add-AzTableRow -Table $cloudTable -PartitionKey $formatedResourceUri -RowKey $subscriptionId -property @{"createdBy"=$creatorDisplayName; "createdAt"=$eventTime} | Out-Null
         $displayName = $creatorDisplayName
     } else {
-        Write-Host "Creator found in referential : $($row.createdBy)"   
+        Write-Information "Creator found in referential : $($row.createdBy)"   
         $displayName = $row.createdBy
     }
     $displayName
@@ -88,12 +88,12 @@ function Set-ResourceCreatedByTag {
         $resourceTags = @{}
     }
     if ($resourceTags.ContainsKey("createdBy") -and $resourceTags["createdBy"] -eq $creatorDisplayName) {
-        Write-Host "Tag createdBy already set with the right creator"
+        Write-Information "Tag createdBy already set with the right creator"
         return
     }
     $resourceTags["createdBy"] = $creatorDisplayName
     Set-AzResource -ResourceId $resourceUri -Tag $resourceTags -Force | Out-Null
-    Write-Host "Tag createdBy appended"
+    Write-Information "Tag createdBy appended"
 
 }
 
