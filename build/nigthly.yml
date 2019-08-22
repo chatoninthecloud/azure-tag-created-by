@@ -13,6 +13,17 @@ pool:
   name: chaton linux
 steps:
 - task: PowerShell@2
+  displayName: 'Install tools'
+  inputs:
+    targetType: filePath
+    filePath: ./build/installModules.ps1
+
+- task: Bash@3
+  inputs:
+    targetType: 'inline'
+    script: 'sudo npm i -g azure-functions-core-tools --unsafe-perm true' 
+    
+- task: PowerShell@2
   displayName: 'Run unit tests'
   inputs:
     targetType: filePath

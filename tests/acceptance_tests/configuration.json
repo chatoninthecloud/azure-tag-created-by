@@ -3,6 +3,6 @@
     "location": "NorthEurope",
     "publicIPName": "testpublicip01",
     "servicePrincipalId": "ee6e2b3b-3af5-4c2d-a0db-84f1b688c552",
-    "maxRetry": 20,
+    "maxRetry": 30,
     "delay": 10
 }
