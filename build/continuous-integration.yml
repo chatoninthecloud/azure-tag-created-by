@@ -7,8 +7,14 @@ pr:
     include:
     - master
 pool:
-  name: chaton linux
+  vmImage: 'ubuntu-latest'
 steps:
+- task: PowerShell@2
+  displayName: 'Install tools'
+  inputs:
+    targetType: filePath
+    filePath: ./build/installModules.ps1
+
 - task: PowerShell@2
   displayName: 'Run unit tests'
   inputs:
