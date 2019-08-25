@@ -10,7 +10,7 @@ pr: none
 variables:
 - group: tagAzureResourceBuild
 pool:
-  name: chaton linux
+  vmImage: 'ubuntu-latest'
 steps:
 - task: PowerShell@2
   displayName: 'Install tools'
