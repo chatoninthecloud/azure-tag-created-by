@@ -1,4 +1,5 @@
 !/bin/bash
+sudo unlink /usr/local/bin/terraform
 curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | sudo -E bash
 tfswitch 0.12.16
 export ARM_SUBSCRIPTION_ID=$TERRAFORM_SP_SUBSCRIPTIONID
