@@ -1,4 +1,6 @@
 !/bin/bash
+curl -L https://raw.githubusercontent.com/warrensbox/terraform-switcher/release/install.sh | bash
+tfswitch 0.12.16
 export ARM_SUBSCRIPTION_ID=$TERRAFORM_SP_SUBSCRIPTIONID
 export ARM_TENANT_ID=$TERRAFORM_SP_TENANTID
 export ARM_CLIENT_ID=$TERRAFORM_SP_APPLICATIONID
