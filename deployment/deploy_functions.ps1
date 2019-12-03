@@ -3,4 +3,4 @@ $credential = New-Object System.Management.Automation.PSCredential ($env:TERRAFO
 Connect-AzAccount -ServicePrincipal -Tenant $env:TERRAFORM_SP_TENANTID -Credential $credential
 Get-AzSubscription -SubscriptionId $env:TERRAFORM_SP_SUBSCRIPTIONID | Select-AzSubscription | Out-Null
 Set-Location ./function 
-func azure functionapp publish tagfunctionapp --powershell
+func azure functionapp publish tagfunctionappsma --powershell
